@@ -1,0 +1,6 @@
+note over browser:
+browser posts new note content to single page app 
+end note
+
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
