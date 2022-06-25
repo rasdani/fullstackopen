@@ -3,7 +3,6 @@ const Course = ({ course }) => {
 		<>
 		<Header course={course.name} />
 		<Content parts={course.parts} />
-		<sum parts={course.parts} />
 		<Total parts={course.parts}/>
 		</>
 	)
@@ -24,7 +23,8 @@ const Content = ({ parts }) =>
 	  </>
 
 const App = () => {
-	  const course = {
+	  const course = [
+		  {
 		  id: 1,
 		  name: 'Half Stack application development',
 		  parts: [
@@ -44,16 +44,31 @@ const App = () => {
 			    id: 3
 		    }
 		  ]
-	  }
+		  },
+		  {
+	           name: 'Node.js',
+		   id: 2,
+		   parts: [
+			{
+			  name: 'Routing',
+			  exercises: 3,
+			  id: 1
+			},
+			{
+			  name: 'Middlewares',
+			  exercises: 7,
+			  id: 2
+			}
+		   ]
+		  }
+		  ] 
 
-	return <Course course={course} />
-	  //return (
-	    //<div>
-	      //<Header course={course} />
-	      //<Content parts={parts} />
-	      //<Total sum={parts[0].exercises + parts[1].exercises + parts[2].exercises} />
-	    //</div>
-	  //)
+	return (
+		<>
+		<Course course={course[0]} />
+		<Course course={course[1]} />
+		</>
+	)
 }
 
 export default App
