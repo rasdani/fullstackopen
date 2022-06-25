@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+	
 const App = () => {
 	const anecdotes = [
 		'If it hurts, do it more often.',
@@ -12,11 +13,19 @@ const App = () => {
 	]
    
 	const [selected, setSelected] = useState(0)
+	const [points, setPoints] = useState(Array(anecdotes.length).fill(0))
+
+	const incrementPoints = () => {
+		const copy = [...points]
+		copy[selected] += 1
+		setPoints(copy)
+}
 
 	return (
 		<div>
 		{anecdotes[selected]}
-		<p><button onClick={() => setSelected(Math.floor(Math.random() * anecdotes.length))}>next anecdote</button></p>
+		<p><button onClick={() => incrementPoints()}>vote</button>
+		<button onClick={() => setSelected(Math.floor(Math.random() * anecdotes.length))}>next anecdote</button></p>
 		</div>
 	)
 }
