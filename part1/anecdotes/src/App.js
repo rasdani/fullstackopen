@@ -20,12 +20,21 @@ const App = () => {
 		copy[selected] += 1
 		setPoints(copy)
 }
+	const indexOfMax = () => {
+		const max = Math.max(...points)
+
+		return (points.indexOf(max))
+	}
+
 
 	return (
 		<div>
+		<h1>Anecdote of the day</h1>
 		{anecdotes[selected]}
 		<p><button onClick={() => incrementPoints()}>vote</button>
 		<button onClick={() => setSelected(Math.floor(Math.random() * anecdotes.length))}>next anecdote</button></p>
+		<h1>Anecdote with most votes</h1>
+		{anecdotes[indexOfMax()]}
 		</div>
 	)
 }
