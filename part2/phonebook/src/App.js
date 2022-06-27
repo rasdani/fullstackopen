@@ -34,7 +34,7 @@ const Search = (props) => {
   )
 }
 
-const handleDelete = (event, person) => {
+const HandleDelete = (event, person) => {
   if (window.confirm(`Delete ${person.name}?`)) {
     return (personsService.delete_(person.id))
   }
@@ -44,7 +44,7 @@ const Person = ({ person }) => {
   return (
     <p key={person.id}>
       {person.name} {person.number} 
-      <button key={person.id} onClick={event => handleDelete(event, person)}>
+      <button key={person.id} onClick={event => HandleDelete(event, person)}>
         delete
       </button>
     </p>
@@ -89,20 +89,48 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
     if (persons.map(person => person.name).includes(newName)) {
-      return (alert(`${newName} is already added to phonebook`))
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        const id = persons
+                        .filter(person => person.name === newName)
+                        .map(person => person.id)
+        console.log(id[0])
+        const personObject = {
+          //id: persons.length + 1,
+          name: newName,
+          number: newNumber
+        }
+        personsService
+          .update(id, personObject)
+          .then(returnedPerson => {
+            setPersons(persons
+                        .map(person => 
+                          person.id != id 
+                          ? person : returnedPerson))
+            console.log(returnedPerson.id)
+            console.log(persons
+                            .map(person => 
+                              person.id != id 
+                              ? person : returnedPerson))
+            setNewName('')
+            setNewNumber('')
+          })
+
+      }
     }
-    const personObject = {
-      //id: persons.length + 1,
-      name: newName,
-      number: newNumber
+    else {
+      const personObject = {
+        //id: persons.length + 1,
+        name: newName,
+        number: newNumber
+      }
+      personsService
+        .create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(personObject))
+          setNewName('')
+          setNewNumber('')
+        })
     }
-    personsService
-      .create(personObject)
-      .then(returnedPerson => {
-        setPersons(persons.concat(personObject))
-        setNewName('')
-        setNewNumber('')
-      })
   }
 
   return (
