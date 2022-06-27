@@ -30,31 +30,47 @@ const Search = (props) => {
                                               .includes(props
                                               .searchName
                                               .toLowerCase()))
+  const handleDelete = props.handleDelete
   return (
-    <AllPersons persons={matches} />
+    <AllPersons persons={matches} handleDelete={handleDelete} />
   )
 }
 
-const HandleDelete = (event, person) => {
-  if (window.confirm(`Delete ${person.name}?`)) {
-    return (personsService.delete_(person.id))
-  }
-}
+//const HandleDelete = (event, person) => {
+  //if (window.confirm(`Delete ${person.name}?`)) {
+    //personsService
+      //.delete_(person.id)
+      //.then(returnedID => {
+        //setPersons(persons.filter(person => person.id !== returnedID))
+  //})
+//}
+//}
 
-const Person = ({ person }) => {
+const Person = ({ person , handleDelete}) => {
   return (
     <p key={person.id}>
       {person.name} {person.number} 
-      <button key={person.id} onClick={event => HandleDelete(event, person)}>
+      <button key={person.id} onClick={event => handleDelete(event, person)}>
         delete
       </button>
     </p>
   )
 }
 
-const AllPersons = ({ persons }) => {
+//const Person = ({ person }) => {
+  //return (
+    //<p key={person.id}>
+      //{person.name} {person.number} 
+      //<button key={person.id} onClick={event => HandleDelete(event, person)}>
+        //delete
+      //</button>
+    //</p>
+  //)
+//}
+
+const AllPersons = ({ persons , handleDelete}) => {
   return (
-    persons.map(person => <Person key={person.id} person={person} />)
+    persons.map(person => <Person key={person.id} person={person} handleDelete={handleDelete} />)
   )
 }
 
@@ -97,11 +113,15 @@ const App = () => {
   const handleSearchChange = (event) => {
     setSearchName(event.target.value)
   }
-  //const handleDelete = (event, param) => {
-    //console.log(event)
-    //console.log(param)
-  //}
-
+  const handleDelete = (event, person) => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personsService
+        .delete_(person.id)
+        .then(returnedID => {
+          setPersons(persons.filter(person => person.id !== returnedID))
+        })
+    }
+  }
   const addPerson = (event) => {
     event.preventDefault()
     if (persons.map(person => person.name).includes(newName)) {
@@ -185,7 +205,7 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
         <div>
-          <Search persons={persons} searchName={searchName} />
+          <Search persons={persons} searchName={searchName} handleDelete={handleDelete} />
         </div>
     </div>
   )
