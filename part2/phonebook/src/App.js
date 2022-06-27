@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import personsService from './services/persons'
 
 //const Form = () => {
   //return (
@@ -46,14 +47,13 @@ const AllPersons = ({ persons }) => {
 }
 
 const App = () => {
-  const baseUrl = 'http://localhost:3001/persons'
   const [persons, setPersons] = useState([])
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+    personsService
+      .getAll()
+      .then(recievedPersons => {
+        setPersons(recievedPersons)
       })
   }, [])
 
@@ -80,9 +80,8 @@ const App = () => {
       name: newName,
       number: newNumber
     }
-    axios
-      .post(baseUrl, personObject)
-      .then(response => response.data)
+    personsService
+      .create(personObject)
       .then(returnedPerson => {
         setPersons(persons.concat(personObject))
         setNewName('')
