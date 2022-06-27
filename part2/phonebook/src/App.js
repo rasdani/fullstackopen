@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import personsService from './services/persons'
+import './index.css'
 
 //const Form = () => {
   //return (
@@ -57,6 +58,18 @@ const AllPersons = ({ persons }) => {
   )
 }
 
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className='succesful'>
+      {message}
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([])
 
@@ -71,6 +84,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchName, setSearchName] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState('TEST')
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -111,6 +125,10 @@ const App = () => {
                             .map(person => 
                               person.id != id 
                               ? person : returnedPerson))
+            setNotificationMessage(`Changed number for ${newName}`)
+            setTimeout(() => {
+              setNotificationMessage(null)
+            }, 5000)
             setNewName('')
             setNewNumber('')
           })
@@ -127,6 +145,10 @@ const App = () => {
         .create(personObject)
         .then(returnedPerson => {
           setPersons(persons.concat(personObject))
+          setNotificationMessage(`Added ${newName}`)
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 5000)
           setNewName('')
           setNewNumber('')
         })
@@ -136,6 +158,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={notificationMessage} />
         <div>
           filter shown with <input value={searchName} onChange={handleSearchChange} />
         </div>
