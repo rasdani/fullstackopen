@@ -34,9 +34,20 @@ const Search = (props) => {
   )
 }
 
+const handleDelete = (event, person) => {
+  if (window.confirm(`Delete ${person.name}?`)) {
+    return (personsService.delete_(person.id))
+  }
+}
+
 const Person = ({ person }) => {
   return (
-    <p key={person.id}>{person.name} {person.number}</p>
+    <p key={person.id}>
+      {person.name} {person.number} 
+      <button key={person.id} onClick={event => handleDelete(event, person)}>
+        delete
+      </button>
+    </p>
   )
 }
 
@@ -70,6 +81,11 @@ const App = () => {
   const handleSearchChange = (event) => {
     setSearchName(event.target.value)
   }
+  //const handleDelete = (event, param) => {
+    //console.log(event)
+    //console.log(param)
+  //}
+
   const addPerson = (event) => {
     event.preventDefault()
     if (persons.map(person => person.name).includes(newName)) {
