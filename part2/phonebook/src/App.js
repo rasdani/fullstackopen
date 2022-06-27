@@ -22,7 +22,12 @@ import axios from 'axios'
 const Search = (props) => {
   const persons = [...props.persons]
   const names = persons.map(person => person.name)
-  const matches = persons.filter(person => person.name.toLowerCase().includes(props.searchName.toLowerCase()))
+  const matches = persons
+                    .filter(person => person.name
+                                              .toLowerCase()
+                                              .includes(props
+                                              .searchName
+                                              .toLowerCase()))
   return (
     <AllPersons persons={matches} />
   )
@@ -41,6 +46,7 @@ const AllPersons = ({ persons }) => {
 }
 
 const App = () => {
+  const baseUrl = 'http://localhost:3001/persons'
   const [persons, setPersons] = useState([])
 
   useEffect(() => {
@@ -70,13 +76,18 @@ const App = () => {
       return (alert(`${newName} is already added to phonebook`))
     }
     const personObject = {
-      id: persons.length + 1,
+      //id: persons.length + 1,
       name: newName,
       number: newNumber
     }
-    setPersons(persons.concat(personObject))
-    setNewName('')
-    setNewNumber('')
+    axios
+      .post(baseUrl, personObject)
+      .then(response => response.data)
+      .then(returnedPerson => {
+        setPersons(persons.concat(personObject))
+        setNewName('')
+        setNewNumber('')
+      })
   }
 
   return (
