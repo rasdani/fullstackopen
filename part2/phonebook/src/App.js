@@ -58,13 +58,14 @@ const AllPersons = ({ persons }) => {
   )
 }
 
-const Notification = ({ message }) => {
+const Notification = ({ message , type}) => {
   if (message === null) {
     return null
   }
 
+  console.log(type)
   return (
-    <div className='succesful'>
+    <div className={type}>
       {message}
     </div>
   )
@@ -84,7 +85,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchName, setSearchName] = useState('')
-  const [notificationMessage, setNotificationMessage] = useState('TEST')
+  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [notificationType, setNotificationType] = useState('succesful')
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -132,7 +134,14 @@ const App = () => {
             setNewName('')
             setNewNumber('')
           })
-
+          .catch(error => {
+            setNotificationType('error')
+            setNotificationMessage(`Information for ${newName} has already been removed from server`)
+            setTimeout(() => {
+              setNotificationMessage(null)
+              setNotificationType('succesful')
+            }, 5000)
+          })
       }
     }
     else {
@@ -158,7 +167,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <Notification message={notificationMessage} />
+      <Notification message={notificationMessage} type={notificationType} />
         <div>
           filter shown with <input value={searchName} onChange={handleSearchChange} />
         </div>
