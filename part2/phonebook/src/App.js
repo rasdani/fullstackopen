@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import personsService from './services/persons'
 import './index.css'
 
@@ -23,7 +22,6 @@ import './index.css'
 
 const Search = (props) => {
   const persons = [...props.persons]
-  const names = persons.map(person => person.name)
   const matches = persons
                     .filter(person => person.name
                                               .toLowerCase()
@@ -36,16 +34,6 @@ const Search = (props) => {
   )
 }
 
-//const HandleDelete = (event, person) => {
-  //if (window.confirm(`Delete ${person.name}?`)) {
-    //personsService
-      //.delete_(person.id)
-      //.then(returnedID => {
-        //setPersons(persons.filter(person => person.id !== returnedID))
-  //})
-//}
-//}
-
 const Person = ({ person , handleDelete}) => {
   return (
     <p key={person.id}>
@@ -56,17 +44,6 @@ const Person = ({ person , handleDelete}) => {
     </p>
   )
 }
-
-//const Person = ({ person }) => {
-  //return (
-    //<p key={person.id}>
-      //{person.name} {person.number} 
-      //<button key={person.id} onClick={event => HandleDelete(event, person)}>
-        //delete
-      //</button>
-    //</p>
-  //)
-//}
 
 const AllPersons = ({ persons , handleDelete}) => {
   return (
@@ -79,7 +56,6 @@ const Notification = ({ message , type}) => {
     return null
   }
 
-  console.log(type)
   return (
     <div className={type}>
       {message}
@@ -129,7 +105,6 @@ const App = () => {
         const id = persons
                         .filter(person => person.name === newName)
                         .map(person => person.id)
-        console.log(id[0])
         const personObject = {
           //id: persons.length + 1,
           name: newName,
@@ -142,11 +117,7 @@ const App = () => {
                         .map(person => 
                           person.id != id 
                           ? person : returnedPerson))
-            console.log(returnedPerson.id)
-            console.log(persons
-                            .map(person => 
-                              person.id != id 
-                              ? person : returnedPerson))
+            console.log(returnedPerson)
             setNotificationMessage(`Changed number for ${newName}`)
             setTimeout(() => {
               setNotificationMessage(null)
@@ -173,7 +144,8 @@ const App = () => {
       personsService
         .create(personObject)
         .then(returnedPerson => {
-          setPersons(persons.concat(personObject))
+          setPersons(persons.concat(returnedPerson))
+          console.log(returnedPerson)
           setNotificationMessage(`Added ${newName}`)
           setTimeout(() => {
             setNotificationMessage(null)

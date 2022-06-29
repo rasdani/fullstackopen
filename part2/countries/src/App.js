@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const CountryView = ({ match, getWeather }) => {
+const CountryView = ({ match }) => {
   const capital = match.map(country => country.capital)
   const area = match.map(country => country.area)
   let languages  = match.map(country => country.languages)
@@ -11,8 +11,8 @@ const CountryView = ({ match, getWeather }) => {
   return (
     <>
     <h1>{match.map(country => country.name.common)}</h1>
-    <p>{capital}</p>
-    <p>{area}</p>
+    <p>capital {capital}</p>
+    <p>area {area}</p>
     <h2>languages: </h2>
     <ul>
       {languages.map(language => <li key={language}>{language}</li>)}
@@ -36,8 +36,6 @@ const Weather = ({ match , getWeather }) => {
   return (
     <>
     <h1>Weather in {capital}</h1>
-    <p>
-    </p>
     </>
   )
 }
@@ -57,7 +55,7 @@ const RenderWeather = ({ weather }) => {
   }
 }
 
-const Search = ({ countries, searchName , onClick, getWeather , getWeatherState, weather}) => {
+const Search = ({ countries, searchName , onClick, getWeather , weather}) => {
   const matches = countries
                     .filter(country => country.name.common
                                               .toLowerCase()
@@ -73,7 +71,7 @@ const Search = ({ countries, searchName , onClick, getWeather , getWeatherState,
   if (matches.length === 1) {
     return (
       <>
-      <CountryView match={matches} getWeather={getWeather} />
+      <CountryView match={matches} />
       <Weather match={matches} getWeather={getWeather} />
       <RenderWeather weather={weather} />
       </>
