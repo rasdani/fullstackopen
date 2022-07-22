@@ -5,16 +5,17 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const logger = require('./utils/logger')
 const config = require('./utils/config')
+const Blog = require('./models/blog')
 
-const blogSchema = new mongoose.Schema({
-  title: String,
-  author: String,
-  url: String,
-  likes: Number
-})
+//const blogSchema = new mongoose.Schema({
+  //title: String,
+  //author: String,
+  //url: String,
+  //likes: Number
+//})
 
 
-const Blog = mongoose.model('Blog', blogSchema)
+//const Blog = mongoose.model('Blog', blogSchema)
 
 const mongoUrl = config.MONGODB_URI
 mongoose.connect(mongoUrl)
@@ -38,7 +39,7 @@ app.post('/api/blogs', (request, response) => {
   blog
     .save()
     .then(result => {
-      response.status(201).json(results)
+      response.status(201).json(result)
     })
 })
 
