@@ -15,6 +15,24 @@ const totalLikes = (blogs) => {
   return likes.reduce(summer, 0)
 }
 
+const favoriteBlog = (blogs) => {
+  const likes = blogs.map(blog => blog.likes)
+  const idxOfMax = likes.indexOf(Math.max(...likes))
+  const favorite = blogs[idxOfMax]
+
+  return favorite === undefined
+    ? {
+      'title': undefined,
+      'author': undefined,
+      'likes': undefined
+    }
+    : {
+      'title': favorite.title,
+      'author': favorite.author,
+      'likes': favorite.likes
+    }
+}
+
 const mostBlogs = (blogs) => {
   const numberOfBlogs = _.countBy(blogs.map(blog => blog.author))
   const maxi = _.max(Object.values(numberOfBlogs))
@@ -30,6 +48,7 @@ const mostBlogs = (blogs) => {
 module.exports = {
   dummy,
   totalLikes,
+  favoriteBlog,
   mostBlogs,
 }
 
