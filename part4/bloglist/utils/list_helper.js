@@ -45,10 +45,27 @@ const mostBlogs = (blogs) => {
   }
 }
 
+const mostLikes = (blogs) => {
+  const likes = blogs.map(blog => blog.likes)
+  const maxi = Math.max(...likes) 
+  const [mostLikedAuthor] = blogs.filter(blog => blog.likes === maxi).map(blog => blog.author)
+  
+  return blogs.length === 0
+  ? {
+    'author': undefined,
+    'likes': undefined
+  }
+  : {
+    'author': mostLikedAuthor,
+    'likes': maxi
+  }
+}
+ 
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes
 }
 
