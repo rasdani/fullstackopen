@@ -16,14 +16,6 @@ const initialBlogs = [
       __v: 0
     },
     {
-      id: "5a422aa71b54a676234d17f8",
-      title: "Go To Statement Considered Harmful",
-      author: "Edsger W. Dijkstra",
-      url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
-      likes: 5,
-      __v: 0
-    },
-    {
       id: "5a422b3a1b54a676234d17f9",
       title: "Canonical string reduction",
       author: "Edsger W. Dijkstra",
@@ -74,10 +66,10 @@ test('blogs are returned as json', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
-test('there are six blogs', async () => {
+test('there are five blogs', async () => {
   const response = await api.get('/api/blogs')
 
-  expect(response.body).toHaveLength(6)
+  expect(response.body).toHaveLength(5)
 })
 
 test('unique identifier property is named properly', async () => {
@@ -87,7 +79,7 @@ test('unique identifier property is named properly', async () => {
 })
 
 test('a valid blog can be added', async () => {
-  const newBlog = [
+  const newBlog = 
     {
         id: '5a422aa71b54a676234d17f8',
         title: 'Go To Statement Considered Harmful',
@@ -96,7 +88,7 @@ test('a valid blog can be added', async () => {
         likes: 5,
         __v: 0
       }
-  ]
+  
 
   await api
     .post('/api/blogs')
@@ -114,6 +106,31 @@ test('a valid blog can be added', async () => {
   )
 })
 
+test('if likes property is missing default to 0', async () => {
+  const newBlog = 
+    {
+        id: '5a422aa71b54a676234d17f8',
+        title: 'Go To Statement Considered Harmful',
+        author: 'Edsger W. Dijkstra',
+        url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+        __v: 0
+      }
+  
+
+  const post_response = await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+  const id = post_response.body.id
+
+  const get_response = await api.get('/api/blogs')
+
+  const [ addedBlog ] = get_response.body.filter(r => r.id === id)
+
+  //expect(addedBlog.title).toBe('Go To Statement Considered Harmful')
+  expect(addedBlog.likes).toBe(0)
+})
 afterAll(() => {
   mongoose.connection.close()
 })
