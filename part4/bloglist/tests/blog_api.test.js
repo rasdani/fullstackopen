@@ -131,6 +131,29 @@ test('if likes property is missing default to 0', async () => {
   //expect(addedBlog.title).toBe('Go To Statement Considered Harmful')
   expect(addedBlog.likes).toBe(0)
 })
+
+test('if title or url is missing respond with 400 BAD REQUEST', async () => {
+  const newBlog = 
+    {
+        id: '5a422aa71b54a676234d17f8',
+        author: 'Edsger W. Dijkstra',
+        likes: 5,
+        __v: 0
+      }
+  
+  
+
+  const post_response = await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
+  const get_response = await api.get('/api/blogs')
+
+  expect(get_response.body).toHaveLength(initialBlogs.length)
+
+}, 15000)
+
 afterAll(() => {
   mongoose.connection.close()
 })
