@@ -86,33 +86,33 @@ test('unique identifier property is named properly', async () => {
   response.body.forEach(blog => expect(blog.id).toBeDefined())
 })
 
-//test('a valid blog can be added', async () => {
-  //const newBlog = [
-    //{
-        //id: '5a422aa71b54a676234d17f8',
-        //title: 'Go To Statement Considered Harmful',
-        //author: 'Edsger W. Dijkstra',
-        //url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-        //likes: 5,
-        //__v: 0
-      //}
-  //]
+test('a valid blog can be added', async () => {
+  const newBlog = [
+    {
+        id: '5a422aa71b54a676234d17f8',
+        title: 'Go To Statement Considered Harmful',
+        author: 'Edsger W. Dijkstra',
+        url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+        likes: 5,
+        __v: 0
+      }
+  ]
 
-  //await api
-    //.post('/api/blogs')
-    //.send(newBlog)
-    //.expect(201)
-    //.expect('Content-Type', /application\/json/)
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
 
-  //const response = await api.get('/api/blogs')
+  const response = await api.get('/api/blogs')
 
-  //const titles = response.body.map(r => r.title)
+  const titles = response.body.map(r => r.title)
 
-  ////expect(response.body).toHaveLength(initialBlogs.length + 1)
-  //expect(titles).toContain(
-        //'Go To Statement Considered Harmful'
-  //)
-//})
+  expect(response.body).toHaveLength(initialBlogs.length + 1)
+  expect(titles).toContain(
+        'Go To Statement Considered Harmful'
+  )
+})
 
 afterAll(() => {
   mongoose.connection.close()
