@@ -115,13 +115,45 @@ describe('tests on adding a new blog', () => {
     expect(get_response.body).toHaveLength(helper.initialBlogs.length)
 
   }, 15000)
+
+  test('update the likes of one blog post with 200 OK, if succesful', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    var blogToUpdate = blogsAtStart[0]
+    const originalLikes = blogToUpdate.likes
+    const modifiedLikes = 999
+    blogToUpdate.likes = modifiedLikes
+    const blogId = blogToUpdate.id
+    //blogToUpdate =     {
+      //title: 'React patterns',
+      //author: 'Michael Chan',
+      //url: 'https://reactpatterns.com/',
+      //likes: 999,
+      //__v: 0,
+      //id: '633324401595be27596eeca0'
+    //}
+    
+
+    const put_response = await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(blogToUpdate)
+      .expect(200)
+      //.expect('Content-Type', /application\/json/)
+    //console.log(put_response.request.url.split('/').at(-1))
+    const id = put_response.request.url.split('/').at(-1)
+    console.log(id)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    const [ updatedBlog ] = blogsAtEnd.filter(r => r.id === id)
+
+    expect(updatedBlog.likes).toBe(modifiedLikes)
+  })
 })
+
 
 describe('deletion of a blog', () => {
   test('succeds with status code 204 if id is valid', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToDelete = blogsAtStart[0]
-    console.log(blogToDelete.id)
     
 
     await api
