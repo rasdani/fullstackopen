@@ -79,16 +79,16 @@ describe('tests on adding a new blog', () => {
         }
     
 
-    const post_response = await api
+    const postResponse = await api
       .post('/api/blogs')
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
-    const id = post_response.body.id
+    const id = postResponse.body.id
 
-    const get_response = await api.get('/api/blogs')
+    const getResponse = await api.get('/api/blogs')
 
-    const [ addedBlog ] = get_response.body.filter(r => r.id === id)
+    const [ addedBlog ] = getResponse.body.filter(r => r.id === id)
 
     expect(addedBlog.likes).toBe(0)
   })
@@ -104,14 +104,14 @@ describe('tests on adding a new blog', () => {
     
     
 
-    const post_response = await api
+    const postResponse = await api
       .post('/api/blogs')
       .send(newBlog)
       .expect(400)
 
-    const get_response = await api.get('/api/blogs')
+    const getResponse = await api.get('/api/blogs')
 
-    expect(get_response.body).toHaveLength(helper.initialBlogs.length)
+    expect(getResponse.body).toHaveLength(helper.initialBlogs.length)
 
   }, 15000)
 
@@ -123,11 +123,11 @@ describe('tests on adding a new blog', () => {
     blogToUpdate.likes = modifiedLikes
     
 
-    const put_response = await api
+    const putResponse = await api
       .put(`/api/blogs/${blogToUpdate.id}`)
       .send(blogToUpdate)
       .expect(200)
-    const id = put_response.request.url.split('/').at(-1)
+    const id = putResponse.request.url.split('/').at(-1)
 
     const blogsAtEnd = await helper.blogsInDb()
     const [ updatedBlog ] = blogsAtEnd.filter(r => r.id === id)
