@@ -6,6 +6,7 @@ const helper = require('./test_helper.js')
 const api = supertest(app)
 
 const Blog = require('../models/blog.js')
+const User = require('../models/users.js')
 
 
 beforeEach(async () => {
@@ -16,6 +17,9 @@ beforeEach(async () => {
     //await blogObject.save()
   //}
   await Blog.insertMany(helper.initialBlogs)
+
+  await User.deleteMany({})
+  await User.insertMany(helper.intitialUsers)
 })
 
 describe('tests on some intitial blogs', () => {
@@ -154,6 +158,27 @@ describe('deletion of a blog', () => {
     const titles = blogsAtEnd.map(blog => blog.title)
 
     expect(titles).not.toContain(blogToDelete.title)
+  })
+})
+
+describe('testsuite for user managment', () => {
+  test('add a user', async () => {
+    const usersAtStart = await helper.usersInDb()
+    const userToAdd = {
+      username: 'addme',
+      name: 'Add Me',
+      password: 'onemoresecret'
+    }
+
+    await api
+      .post('/api/users')
+      .send(userToAdd)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+
+    expect(usersAtEnd).toHaveLength(helper.intitialUsers.length + 1)
   })
 })
     
