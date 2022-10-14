@@ -19,6 +19,7 @@ usersRouter.post('/', async (request, response) => {
 
     response.status(201).json(savedUser)
   } else {
+    console.error('username and password must have at least three characters')
     response.status(400).end()
   }
 })

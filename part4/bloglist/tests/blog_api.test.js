@@ -162,7 +162,7 @@ describe('deletion of a blog', () => {
 })
 
 describe('testsuite for user managment', () => {
-  test('add a user', async () => {
+  test('add a user, respond 201 CREATED if succesful', async () => {
     const usersAtStart = await helper.usersInDb()
     const userToAdd = {
       username: 'addme',
@@ -180,6 +180,23 @@ describe('testsuite for user managment', () => {
 
     expect(usersAtEnd).toHaveLength(helper.intitialUsers.length + 1)
   })
+  test('if username or password have less than 3 characters, respond with 400 BAD REQUEST', async () => {
+    const usersAtStart = await helper.usersInDb()
+    const userToAdd = {
+      username: 'me',
+      name: 'Too Short',
+      password: 'pw'
+    }
+
+    await api
+      .post('/api/users')
+      .send(userToAdd)
+      .expect(400)
+      //.expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toEqual(usersAtStart)
+    })
 })
     
 afterAll(() => {
