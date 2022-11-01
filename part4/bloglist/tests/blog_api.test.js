@@ -63,6 +63,7 @@ describe('tests on adding a new blog', () => {
       .expect('Content-Type', /application\/json/)
 
     const response = await api.get('/api/blogs')
+    console.log(response.body)
 
     const titles = response.body.map(r => r.title)
 
