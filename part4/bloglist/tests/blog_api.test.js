@@ -63,7 +63,7 @@ describe('tests on adding a new blog', () => {
       .expect('Content-Type', /application\/json/)
 
     const response = await api.get('/api/blogs')
-    console.log(response.body)
+    //console.log(response.body)
 
     const titles = response.body.map(r => r.title)
 
@@ -198,8 +198,81 @@ describe('testsuite for user managment', () => {
     const usersAtEnd = await helper.usersInDb()
     expect(usersAtEnd).toEqual(usersAtStart)
     })
-})
-    
+  test('login with valid username and password returns 200 OK', async () => {
+    const userToAdd = {
+      username: 'addme',
+      name: 'Add Me',
+      password: 'onemoresecret'
+    }
+
+    await api
+      .post('/api/users')
+      .send(userToAdd)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const credentials = {
+      username: "addme",
+      password: "onemoresecret"
+    }
+
+    await api
+      .post('/api/login')
+      .send(credentials)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('login with invalid password returns 401 UNAUTHORIZED', async () => {
+    const userToAdd = {
+      username: 'addme',
+      name: 'Add Me',
+      password: 'onemoresecret'
+    }
+
+    await api
+      .post('/api/users')
+      .send(userToAdd)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const credentials = {
+      username: "addme",
+      password: "onemore"
+    }
+
+    await api
+      .post('/api/login')
+      .send(credentials)
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
+  })
+  test('login with invalid username returns 401 UNAUTHORIZED', async () => {
+    const userToAdd = {
+      username: 'addme',
+      name: 'Add Me',
+      password: 'onemoresecret'
+    }
+
+    await api
+      .post('/api/users')
+      .send(userToAdd)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const credentials = {
+      username: "addyourself",
+      password: "onemoresecret"
+    }
+
+    await api
+      .post('/api/login')
+      .send(credentials)
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
+  })
+}) 
+
 afterAll(() => {
   mongoose.connection.close()
 })

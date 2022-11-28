@@ -32,7 +32,7 @@ blogsRouter.post('/', async (request, response) => {
   const author = body.author
   //const user = await User.findById(body.userId)
   const user = await User.findOne()
-  console.log(body)
+  //console.log(body)
 
   if (!title || !url || !user) {
     response.status(400).end()
@@ -47,7 +47,7 @@ blogsRouter.post('/', async (request, response) => {
     const savedBlog = await blog.save()
     user.blogs = user.blogs.concat(savedBlog._id)
     await user.save()
-    console.log(response)
+    //console.log(response)
     response.status(201).json(savedBlog)
   }
 })

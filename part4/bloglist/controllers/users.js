@@ -4,6 +4,8 @@ const User = require('../models/users')
 
 usersRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body
+  //console.log(request.body)
+  //console.log(password)
 
   if (password && password.length >= 3) {
     const saltRounds = 10
