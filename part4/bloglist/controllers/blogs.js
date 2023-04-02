@@ -26,21 +26,22 @@ blogsRouter.get('/', async (request, response) => {
     //})
 //})
 
-const getTokenFrom = request => {
-  const authorization = request.get('authorization') 
-  if (authorization && authorization.toLowerCase().startsWith('bearer')) {
-    return authorization.substring(7)
-  }
-  return null
-}
+// const getTokenFrom = request => {
+//   const authorization = request.get('authorization') 
+//   if (authorization && authorization.toLowerCase().startsWith('bearer')) {
+//     return authorization.substring(7)
+//   }
+//   return null
+// }
 
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
   const title = body.title
   const url = body.url
   const author = body.author
-  const token = getTokenFrom(request)
-  const decodedToken = jwt.verify(token, process.env.SECRET)
+  // const token = getTokenFrom(request)
+  // const decodedToken = jwt.verify(token, process.env.SECRET)
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
   if (!decodedToken) {
     return response.status(401).json({ error: 'token missing or invalid' })
   }
