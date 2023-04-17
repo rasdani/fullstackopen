@@ -4,4 +4,4 @@
 
 ### Deep Dive Into Modern Web Development
 
-[part3](https://github.com/rasdani/fullstackopen-part3) resides in its own repo.
+[part3](https://github.com/rasdani/fullstackopen-part3) resides in its own repo and shows a deployed app.
